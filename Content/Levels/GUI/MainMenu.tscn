@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3 uid="uid://cjxwdyl0drmxm"]
+
+[ext_resource type="Script" path="res://Source/GUI/MainMenu.gd" id="1_rfj2k"]
+[ext_resource type="PackedScene" uid="uid://c0bmh3s8c0vmo" path="res://Content/Levels/Sandbox/test01.tscn" id="2_j5ap1"]
+[ext_resource type="Texture2D" uid="uid://bn7ef3mevcjua" path="res://Content/Art/Textures/background.jpeg" id="3_tevt0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yb02p"]
+bg_color = Color(0, 0, 0, 0.490196)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rfj2k")
+simulation_scene = ExtResource("2_j5ap1")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_tevt0")
+
+[node name="MainContainer" type="Panel" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yb02p")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.0
+offset_top = -50.5
+offset_right = 43.0
+offset_bottom = 50.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="simulate" type="Button" parent="MainContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "SIMULATE"
+
+[node name="settings" type="Button" parent="MainContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "SETTINGS"
+
+[node name="exit" type="Button" parent="MainContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "EXIT"
+
+[connection signal="button_down" from="MainContainer/VBoxContainer/simulate" to="." method="_on_simulate_button_down"]
+[connection signal="button_down" from="MainContainer/VBoxContainer/settings" to="." method="_on_settings_button_down"]
+[connection signal="button_down" from="MainContainer/VBoxContainer/exit" to="." method="_on_exit_button_down"]

@@ -1,0 +1,63 @@
+[gd_scene load_steps=5 format=3 uid="uid://bo0fu6q05wig2"]
+
+[ext_resource type="Script" path="res://Source/GUI/InGameGUI.gd" id="1_apyj1"]
+[ext_resource type="Texture2D" uid="uid://ds4q526lf3ctj" path="res://Content/Art/Textures/config.png" id="1_e1jo6"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fwjb4"]
+content_margin_left = 32.0
+content_margin_top = 32.0
+content_margin_right = 32.0
+content_margin_bottom = 32.0
+texture = ExtResource("1_e1jo6")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4wf4f"]
+content_margin_left = 32.0
+content_margin_top = 32.0
+content_margin_right = 32.0
+content_margin_bottom = 32.0
+texture = ExtResource("1_e1jo6")
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[node name="InGameGUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_apyj1")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="stats" type="Label" parent="HBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="config_btn" type="Button" parent="HBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_fwjb4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_4wf4f")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_4wf4f")
+theme_override_styles/focus = SubResource("StyleBoxTexture_4wf4f")
+
+[connection signal="button_down" from="HBoxContainer/MarginContainer/config_btn" to="." method="_on_config_btn_button_down"]

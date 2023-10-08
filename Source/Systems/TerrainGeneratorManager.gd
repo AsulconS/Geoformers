@@ -68,11 +68,20 @@ func generate_m_x_n_chunks(m : int, n : int):
 
 
 func _ready():
+	GeneratorConfig.chunk_size_changed.connect(_on_chunk_size_changed)
 	load_image_on_memory();
 	loading_thread = Thread.new();
-	loading_thread.start(generate_m_x_n_chunks.bind(160, 160));
-
+	var size = GeneratorConfig.chunk_size
+	loading_thread.start(generate_m_x_n_chunks.bind(size, size));
 
 func _exit_tree():
 	should_abort_chunk_loading = true;
 	loading_thread.wait_to_finish();
+
+func _on_chunk_size_changed():
+	for child in get_children():
+		remove_child(child)
+		child.queue_free()
+	loading_thread = Thread.new();
+	var size = GeneratorConfig.chunk_size
+	loading_thread.start(generate_m_x_n_chunks.bind(size, size));
