@@ -2,7 +2,6 @@ class_name ProceduralMesh;
 extends MeshInstance3D;
 
 
-@export var amplitude_scale = 1.0;
 @export var widht_scale : float = 1.0;
 @export var height_scale : float = 1.0;
 @export var crop_upper_left_pivot : Vector2;
@@ -22,15 +21,15 @@ func generate_mesh(image_data : PackedByteArray, image_dims : Vector2i):
 	
 	var image_upper_left_indices : Vector2i = Vector2i(crop_upper_left_pivot * Vector2(image_dims));
 	var image_lower_right_indices : Vector2i = Vector2i(crop_lower_right_pivot * Vector2(image_dims));
-	var cropped_width : int = absi(image_lower_right_indices.x - image_upper_left_indices.x);
-	var cropped_height : int = absi(image_lower_right_indices.y - image_upper_left_indices.y);
+	var cropped_width : int = absi(image_lower_right_indices.x - image_upper_left_indices.x) + 1;
+	var cropped_height : int = absi(image_lower_right_indices.y - image_upper_left_indices.y) + 1;
 	
-	for i in range(image_upper_left_indices.y, image_lower_right_indices.y):
-		for j in range(image_upper_left_indices.x, image_lower_right_indices.x):
+	for i in range(image_upper_left_indices.y, image_lower_right_indices.y + 1):
+		for j in range(image_upper_left_indices.x, image_lower_right_indices.x + 1):
 			var index : int = clamp(i, 0, image_dims.y - 1) * image_dims.x + clamp(j, 0, image_dims.x - 1);
-			var y_val : float = clamp(amplitude_scale * image_data[index] / 255.0, 0.0, 1.0);
-			var x_val : float = clamp(-1.0 + 2.0 * float(j - image_upper_left_indices.x) / float(cropped_width), -1.0, 1.0);
-			var z_val : float = clamp(-1.0 + 2.0 * float(i - image_upper_left_indices.y) / float(cropped_height), -1.0, 1.0);
+			var y_val : float = clamp(image_data[index] / 255.0, 0.0, 1.0);
+			var x_val : float = clamp(-1.0 + 2.0 * float(j - image_upper_left_indices.x) / float(cropped_width - 1), -1.0, 1.0);
+			var z_val : float = clamp(-1.0 + 2.0 * float(i - image_upper_left_indices.y) / float(cropped_height - 1), -1.0, 1.0);
 			vertices.append(Vector3(x_val, y_val, z_val));
 			normals.append(Vector3.UP);
 			uvs.append(Vector2(0.0, 0.0));

@@ -3,16 +3,18 @@ extends Node
 
 @onready var terrain_shader : Shader = preload("res://Content/Art/Shaders/TerrainBlue.gdshader");
 @onready var terrain_texture : Texture2D = preload("res://Content/Art/Textures/EarthTerrain.png");
+@onready var terrain_chunk_size : Vector2 = Vector2();
 
 
 var image : Image;
 var image_dims : Vector2i;
 var image_data : PackedByteArray;
+var initial_chunk_pos : Vector2 = Vector2(0.295, 0.565);
 
 
 func load_image_on_memory():
 	image = terrain_texture.get_image().duplicate();
-	image.resize(image.get_width(), image.get_height(), Image.INTERPOLATE_BILINEAR);
+	#image.resize(image.get_width(), image.get_height(), Image.INTERPOLATE_BILINEAR);
 	
 	image_data = image.get_data();
 	image_dims = Vector2i(image.get_width(), image.get_height());
