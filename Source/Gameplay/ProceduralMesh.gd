@@ -2,10 +2,9 @@ class_name ProceduralMesh;
 extends MeshInstance3D;
 
 
-@export var widht_scale : float = 1.0;
-@export var height_scale : float = 1.0;
-@export var crop_upper_left_pivot : Vector2;
-@export var crop_lower_right_pivot : Vector2;
+var image_dims : Vector2i;
+var crop_upper_left_index : Vector2i;
+var crop_lower_right_index : Vector2i;
 
 
 func generate_mesh(terrainGeneratorManager : TerrainGeneratorManager):
@@ -14,15 +13,13 @@ func generate_mesh(terrainGeneratorManager : TerrainGeneratorManager):
 	var surface_array = [];
 	surface_array.resize(Mesh.ARRAY_MAX);
 	
-	var image_dims : Vector2i = terrainGeneratorManager.image_dims;
-	
 	var uvs = PackedVector2Array();
 	var indices = PackedInt32Array();
 	var normals = PackedVector3Array();
 	var vertices = PackedVector3Array();
 	
-	var image_upper_left_indices : Vector2i = Vector2i(crop_upper_left_pivot * Vector2(image_dims));
-	var image_lower_right_indices : Vector2i = Vector2i(crop_lower_right_pivot * Vector2(image_dims));
+	var image_upper_left_indices : Vector2i = crop_upper_left_index;
+	var image_lower_right_indices : Vector2i = crop_lower_right_index;
 	var cropped_width : int = absi(image_lower_right_indices.x - image_upper_left_indices.x) + 1;
 	var cropped_height : int = absi(image_lower_right_indices.y - image_upper_left_indices.y) + 1;
 	
