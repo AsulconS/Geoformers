@@ -21,6 +21,7 @@ var chunk_plane_origin : Vector2 = Vector2.ZERO;
 # Global aux
 var loading_thread : Thread;
 var chunks_generated : int = 0;
+var should_abort_chunk_loading : bool = false;
 
 
 func load_image_on_memory():
@@ -30,6 +31,9 @@ func load_image_on_memory():
 
 
 func generate_chunk(world_plane_position : Vector2, crop_upper_left_index : Vector2i, crop_lower_right_index : Vector2i):
+	if should_abort_chunk_loading:
+		return;
+	
 	var new_mesh : ProceduralMesh = ProceduralMesh.new();
 	new_mesh.scale = 0.5 * chunk_world_dims;
 	new_mesh.position = Vector3(world_plane_position.x, 0.0, world_plane_position.y);
@@ -48,7 +52,8 @@ func generate_chunk(world_plane_position : Vector2, crop_upper_left_index : Vect
 func generate_m_x_n_chunks(m : int, n : int):
 	var chunk_plane_dims : Vector2 = Vector2(chunk_world_dims.x, chunk_world_dims.z);
 	var chunk_read_dims : Vector2i = Vector2i(chunk_read_size, chunk_read_size);
-	var chunk_read_half_dims : Vector2i = chunk_read_dims / 2;
+	var chunk_read_half_ndims : Vector2i = chunk_read_dims / 2;
+	var chunk_read_half_pdims : Vector2i = (chunk_read_dims + Vector2i.ONE) / 2;
 	
 	var ul_offset_low : Vector2i = Vector2i(-m / 2, -n / 2);
 	var lr_offset_lim : Vector2i = Vector2i((m + 1) / 2, (n + 1) / 2);
@@ -58,8 +63,8 @@ func generate_m_x_n_chunks(m : int, n : int):
 			var chunk_read_pos   : Vector2i = chunk_read_origin + chunk_read_dims * direction_vector;
 			var chunk_plane_pos  : Vector2  = chunk_plane_origin + chunk_plane_dims * Vector2(direction_vector);
 			generate_chunk(chunk_plane_pos,
-						   chunk_read_pos - chunk_read_half_dims,
-						   chunk_read_pos + chunk_read_half_dims);
+						   chunk_read_pos - chunk_read_half_ndims,
+						   chunk_read_pos + chunk_read_half_pdims);
 
 
 func _ready():
@@ -69,4 +74,5 @@ func _ready():
 
 
 func _exit_tree():
+	should_abort_chunk_loading = true;
 	loading_thread.wait_to_finish();
