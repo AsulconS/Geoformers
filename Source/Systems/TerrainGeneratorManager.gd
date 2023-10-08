@@ -13,10 +13,10 @@ var image_dims : Vector2i;
 var image_data : PackedByteArray;
 
 # Chunks Param Data
-var chunk_read_size          : int = 16;
-var chunk_world_dims         : Vector3 = Vector3(2.0, 1.25, 2.0);
-var chunk_read_origin        : Vector2i = Vector2i(6415, 6325);
-var chunk_rendering_distance : int = 3;
+var chunk_read_size       : int = 16;
+var chunk_world_dims      : Vector3 = Vector3(2.0, 1.25, 2.0);
+var chunk_read_origin     : Vector2i = Vector2i(6415, 6325);
+var chunk_render_distance : int = 3;
 # Chunk Computed Data
 var chunk_plane_dims : Vector2;
 var chunk_read_dims  : Vector2i;
@@ -36,13 +36,13 @@ var chunks_generated : int = 0;
 var should_abort_chunk_loading : bool = false;
 
 
-func load_image_on_memory():
+func _load_image_on_memory() -> void:
 	image = terrain_texture.get_image().duplicate();
 	image_data = image.get_data();
 	image_dims = Vector2i(image.get_width(), image.get_height());
 
 
-func generate_chunk(world_plane_position : Vector2, crop_upper_left_index : Vector2i, crop_lower_right_index : Vector2i):
+func _generate_chunk(world_plane_position : Vector2, crop_upper_left_index : Vector2i, crop_lower_right_index : Vector2i) -> void:
 	if should_abort_chunk_loading:
 		return;
 	
@@ -61,7 +61,7 @@ func generate_chunk(world_plane_position : Vector2, crop_upper_left_index : Vect
 	call_deferred("add_child", new_mesh);
 
 
-func generate_m_x_n_chunks(m : int, n : int):
+func _generate_m_x_n_chunks(m : int, n : int) -> void:
 	var ul_offset_low : Vector2i = Vector2i(-m / 2, -n / 2);
 	var lr_offset_lim : Vector2i = Vector2i((m + 1) / 2, (n + 1) / 2);
 	for i in range(ul_offset_low.y, lr_offset_lim.y):
@@ -81,23 +81,29 @@ func generate_m_x_n_chunks(m : int, n : int):
 					var direction_vector : Vector2i = Vector2i(j + k, i);
 					var chunk_read_pos   : Vector2i = chunk_read_origin + chunk_read_dims * direction_vector;
 					var chunk_plane_pos  : Vector2  = chunk_render_origin + chunk_plane_dims * Vector2(direction_vector);
-					generate_chunk(chunk_plane_pos,
-								   chunk_read_pos - chunk_read_half_ndims,
-								   chunk_read_pos + chunk_read_half_pdims);
-					chunk_state_array[cached_chunk_state_index] |= (0x1 << k);
+					_generate_chunk(chunk_plane_pos,
+									chunk_read_pos - chunk_read_half_ndims,
+									chunk_read_pos + chunk_read_half_pdims);
+					#chunk_state_array[cached_chunk_state_index] |= (0x1 << k);
 
 
-func _ready():
-	# Load image on ready
-	GeneratorConfig.chunk_size_changed.connect(_on_chunk_size_changed)
-	load_image_on_memory();
-	
+func _compute_chunk_state_props() -> void:
 	# Chunk State Computing
-	chunk_matrix_side_size = 2 * chunk_rendering_distance + 1;
+	chunk_render_distance = GeneratorConfig.chunk_render_distance;
+	chunk_matrix_side_size = 2 * chunk_render_distance + 1;
 	chunk_cached_dims = Vector2i((chunk_matrix_side_size + 7) / 8, chunk_matrix_side_size);
 	chunk_state_array.resize(chunk_cached_dims.x * chunk_cached_dims.y);
+
+
+func _ready() -> void:
+	# Connect Signal
+	GeneratorConfig.chunk_render_distance_changed.connect(_on_chunk_render_distance_changed);
 	
-	# Compute chunk runtime data
+	# Init routines
+	_load_image_on_memory();
+	_compute_chunk_state_props();
+	
+	# Compute chunk read data
 	chunk_read_dims = Vector2(chunk_read_size, chunk_read_size);
 	chunk_plane_dims = Vector2(chunk_world_dims.x, chunk_world_dims.z);
 	chunk_read_half_ndims = chunk_read_dims / 2;
@@ -105,22 +111,28 @@ func _ready():
 	
 	# Async loading chunks
 	loading_thread = Thread.new();
-	var size = GeneratorConfig.chunk_size
-	loading_thread.start(generate_m_x_n_chunks.bind(size, size));
+	loading_thread.start(_generate_m_x_n_chunks.bind(chunk_matrix_side_size,
+													 chunk_matrix_side_size));
 
-func _exit_tree():
+
+func _exit_tree() -> void:
 	should_abort_chunk_loading = true;
 	loading_thread.wait_to_finish();
 
 
-func _process(_delta : float):
-	if not loading_thread.is_alive():
-		generate_m_x_n_chunks(chunk_matrix_side_size, chunk_matrix_side_size);
+func _process(_delta : float) -> void:
+	#if not loading_thread.is_alive():
+		#generate_m_x_n_chunks(chunk_matrix_side_size,
+							#chunk_matrix_side_size);
+	pass;
 
-func _on_chunk_size_changed():
+
+func _on_chunk_render_distance_changed() -> void:
 	for child in get_children():
-		remove_child(child)
-		child.queue_free()
+		remove_child(child);
+		child.queue_free();
+	chunks_generated = get_child_count();
+	_compute_chunk_state_props();
 	loading_thread = Thread.new();
-	var size = GeneratorConfig.chunk_size
-	loading_thread.start(generate_m_x_n_chunks.bind(size, size));
+	loading_thread.start(_generate_m_x_n_chunks.bind(chunk_matrix_side_size,
+													 chunk_matrix_side_size));

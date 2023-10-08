@@ -11,7 +11,7 @@ const YAW_DEG_PER_SEC  = 0.75 * PI;
 # var gravity = ProjectSettings.get_setting("physics/3d/default_gravity");
 
 
-func _physics_process(delta):
+func _physics_process(delta) -> void:
 	var input_dir = Input.get_vector("Left", "Right", "Forward", "Backward");
 	var input_fly = Input.get_axis("Down", "Up");
 	var input_yaw = Input.get_axis("YawLeft", "YawRight");

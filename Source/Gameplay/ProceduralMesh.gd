@@ -7,7 +7,7 @@ var crop_upper_left_index : Vector2i;
 var crop_lower_right_index : Vector2i;
 
 
-func generate_mesh(terrainGeneratorManager : TerrainGeneratorManager):
+func generate_mesh(terrainGeneratorManager : TerrainGeneratorManager) -> void:
 	mesh = ArrayMesh.new();
 	
 	var surface_array = [];
