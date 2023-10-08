@@ -23,7 +23,7 @@ offset_bottom = 65.0
 script = ExtResource("2_83sv0")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 script = ExtResource("3_vxm8q")
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
