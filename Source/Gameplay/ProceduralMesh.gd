@@ -8,11 +8,13 @@ extends MeshInstance3D;
 @export var crop_lower_right_pivot : Vector2;
 
 
-func generate_mesh(image_data : PackedByteArray, image_dims : Vector2i):
+func generate_mesh(terrainGeneratorManager : TerrainGeneratorManager):
 	mesh = ArrayMesh.new();
 	
 	var surface_array = [];
 	surface_array.resize(Mesh.ARRAY_MAX);
+	
+	var image_dims : Vector2i = terrainGeneratorManager.image_dims;
 	
 	var uvs = PackedVector2Array();
 	var indices = PackedInt32Array();
@@ -27,7 +29,7 @@ func generate_mesh(image_data : PackedByteArray, image_dims : Vector2i):
 	for i in range(image_upper_left_indices.y, image_lower_right_indices.y + 1):
 		for j in range(image_upper_left_indices.x, image_lower_right_indices.x + 1):
 			var index : int = clamp(i, 0, image_dims.y - 1) * image_dims.x + clamp(j, 0, image_dims.x - 1);
-			var y_val : float = clamp(image_data[index] / 255.0, 0.0, 1.0);
+			var y_val : float = clamp(terrainGeneratorManager.image_data[index] / 255.0, 0.0, 1.0);
 			var x_val : float = clamp(-1.0 + 2.0 * float(j - image_upper_left_indices.x) / float(cropped_width - 1), -1.0, 1.0);
 			var z_val : float = clamp(-1.0 + 2.0 * float(i - image_upper_left_indices.y) / float(cropped_height - 1), -1.0, 1.0);
 			vertices.append(Vector3(x_val, y_val, z_val));

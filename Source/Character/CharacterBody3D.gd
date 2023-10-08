@@ -1,4 +1,4 @@
-extends CharacterBody3D
+extends CharacterBody3D;
 
 
 const SPEED = 3.0;
