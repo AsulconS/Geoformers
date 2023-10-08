@@ -9,7 +9,9 @@ extends Node
 var image : Image;
 var image_dims : Vector2i;
 var image_data : PackedByteArray;
-var initial_chunk_pos : Vector2 = Vector2(0.295, 0.565);
+var chunk_dims : Vector2 = Vector2(3.0, 2.0);
+var ul_chunk_pos : Vector2 = Vector2(0.295, 0.565);
+var lr_chunk_pos : Vector2 = Vector2(0.305, 0.58);
 
 
 func load_image_on_memory():
@@ -37,9 +39,18 @@ func generate_chunk(position : Vector2, crop_upper_left_pivot : Vector2, crop_lo
 
 func _ready():
 	load_image_on_memory();
-	generate_chunk(Vector2(0.0, 0.0), Vector2(0.295, 0.565), Vector2(0.305, 0.58));
-	generate_chunk(Vector2(0.0, -2.0), Vector2(0.295, 0.565 - 0.015), Vector2(0.305, 0.58 - 0.015));
-
-
-func _process(_delta):
-	pass
+	var chunk_crop_dims : Vector2 = lr_chunk_pos - ul_chunk_pos;
+	var terrain_origin  : Vector2 = Vector2.ZERO;
+	generate_chunk(terrain_origin, ul_chunk_pos, lr_chunk_pos);
+	generate_chunk(terrain_origin + chunk_dims * Vector2.LEFT,
+				   ul_chunk_pos + chunk_crop_dims * Vector2.LEFT,
+				   lr_chunk_pos + chunk_crop_dims * Vector2.LEFT);
+	generate_chunk(terrain_origin + chunk_dims * Vector2.RIGHT,
+				   ul_chunk_pos + chunk_crop_dims * Vector2.RIGHT,
+				   lr_chunk_pos + chunk_crop_dims * Vector2.RIGHT);
+	generate_chunk(terrain_origin + chunk_dims * Vector2.DOWN,
+				   ul_chunk_pos + chunk_crop_dims * Vector2.DOWN,
+				   lr_chunk_pos + chunk_crop_dims * Vector2.DOWN);
+	generate_chunk(terrain_origin + chunk_dims * Vector2.UP,
+				   ul_chunk_pos + chunk_crop_dims * Vector2.UP,
+				   lr_chunk_pos + chunk_crop_dims * Vector2.UP);

@@ -50,7 +50,3 @@ func generate_mesh(image_data : PackedByteArray, image_dims : Vector2i):
 	surface_array[Mesh.ARRAY_INDEX]  = indices;
 	
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, surface_array);
-
-
-func _process(_delta):
-	pass;
