@@ -11,8 +11,17 @@ config_version=5
 [application]
 
 config/name="Geoformers"
+run/main_scene="res://Content/Levels/GUI/MainMenu.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GeneratorConfig="*res://Source/Gameplay/GeneratorConfig.gd"
+
+[gui]
+
+theme/custom="res://Content/Art/themes/nasa.tres"
 
 [input]
 

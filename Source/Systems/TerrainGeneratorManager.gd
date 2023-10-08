@@ -89,6 +89,7 @@ func generate_m_x_n_chunks(m : int, n : int):
 
 func _ready():
 	# Load image on ready
+	GeneratorConfig.chunk_size_changed.connect(_on_chunk_size_changed)
 	load_image_on_memory();
 	
 	# Chunk State Computing
@@ -104,9 +105,8 @@ func _ready():
 	
 	# Async loading chunks
 	loading_thread = Thread.new();
-	loading_thread.start(generate_m_x_n_chunks.bind(chunk_matrix_side_size,
-													chunk_matrix_side_size));
-
+	var size = GeneratorConfig.chunk_size
+	loading_thread.start(generate_m_x_n_chunks.bind(size, size));
 
 func _exit_tree():
 	should_abort_chunk_loading = true;
@@ -116,3 +116,11 @@ func _exit_tree():
 func _process(_delta : float):
 	if not loading_thread.is_alive():
 		generate_m_x_n_chunks(chunk_matrix_side_size, chunk_matrix_side_size);
+
+func _on_chunk_size_changed():
+	for child in get_children():
+		remove_child(child)
+		child.queue_free()
+	loading_thread = Thread.new();
+	var size = GeneratorConfig.chunk_size
+	loading_thread.start(generate_m_x_n_chunks.bind(size, size));
