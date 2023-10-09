@@ -1,8 +1,8 @@
 extends CharacterBody3D;
 
 
-const SPEED = 3.0;
-const FLY_SPEED = 2.5;
+const SPEED = 6.0;
+const FLY_SPEED = 3.0;
 const TILT_MAX_ANGLE = 0.45 * PI;
 const TILT_DEG_PER_SEC = 0.5 * PI;
 const YAW_DEG_PER_SEC  = 0.75 * PI;
