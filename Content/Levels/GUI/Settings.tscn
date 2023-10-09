@@ -4,10 +4,10 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_teqda"]
 bg_color = Color(0, 0, 0, 0.670588)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -62,7 +62,7 @@ theme_override_constants/separation = 20
 [node name="Label" type="Label" parent="MarginContainer/Panel/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 32
 text = "Render Distance"
 
@@ -70,7 +70,7 @@ text = "Render Distance"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 4
 size_flags_vertical = 1
 min_value = 4.0
 max_value = 64.0
@@ -79,7 +79,7 @@ value = 4.0
 [node name="RenderDistance" type="Label" parent="MarginContainer/Panel/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 8
 theme_override_font_sizes/font_size = 32
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel/VBoxContainer"]
@@ -101,6 +101,7 @@ layout_mode = 2
 
 [node name="Back" type="Button" parent="MarginContainer/Panel/VBoxContainer/MarginContainer/VBoxContainer2/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 2
 text = "BACK"
@@ -112,10 +113,6 @@ size_flags_horizontal = 6
 size_flags_vertical = 8
 focus_mode = 0
 text = "SAVE"
-
-[node name="Label" type="Label" parent="MarginContainer/Panel/VBoxContainer/MarginContainer/VBoxContainer2/MarginContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
 
 [connection signal="value_changed" from="MarginContainer/Panel/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/RenderDistanceSlider" to="." method="_on_render_distance_slider_value_changed"]
 [connection signal="button_down" from="MarginContainer/Panel/VBoxContainer/MarginContainer/VBoxContainer2/MarginContainer/HBoxContainer/Back" to="." method="_on_back_button_down"]

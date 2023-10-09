@@ -1,11 +1,83 @@
-[gd_scene load_steps=5 format=3 uid="uid://cjxwdyl0drmxm"]
+[gd_scene load_steps=13 format=3 uid="uid://cjxwdyl0drmxm"]
 
 [ext_resource type="Script" path="res://Source/GUI/MainMenu.gd" id="1_rfj2k"]
 [ext_resource type="PackedScene" uid="uid://c0bmh3s8c0vmo" path="res://Content/Levels/Sandbox/test01.tscn" id="2_j5ap1"]
-[ext_resource type="Texture2D" uid="uid://bn7ef3mevcjua" path="res://Content/Art/Textures/background.jpeg" id="3_tevt0"]
+[ext_resource type="Shader" path="res://Content/Art/Shaders/LoopShader.gdshader" id="3_a3bxv"]
+[ext_resource type="Texture2D" uid="uid://bo86oiiikian0" path="res://Content/Art/Textures/seamless_background.png" id="3_ktluu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v3bre"]
+shader = ExtResource("3_a3bxv")
+shader_parameter/x_speed = 0.7
+shader_parameter/y_speed = 0.2
+shader_parameter/wave_speed = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yb02p"]
-bg_color = Color(0, 0, 0, 0.490196)
+bg_color = Color(0, 0, 0, 0.0823529)
+
+[sub_resource type="Gradient" id="Gradient_4g5nx"]
+interpolation_mode = 2
+colors = PackedColorArray(1, 1, 1, 0.423529, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8y7n3"]
+gradient = SubResource("Gradient_4g5nx")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0.715596)
+
+[sub_resource type="Animation" id="Animation_ipytl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ir6f7"]
+resource_name = "fadein"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bh6d1"]
+resource_name = "fadeout"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xs0ut"]
+_data = {
+"RESET": SubResource("Animation_ipytl"),
+"fadein": SubResource("Animation_ir6f7"),
+"fadeout": SubResource("Animation_bh6d1")
+}
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -14,17 +86,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_rfj2k")
 simulation_scene = ExtResource("2_j5ap1")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="."]
+texture_filter = 6
+material = SubResource("ShaderMaterial_v3bre")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_tevt0")
+texture = ExtResource("3_ktluu")
+expand_mode = 1
+stretch_mode = 1
 
 [node name="MainContainer" type="Panel" parent="."]
 unique_name_in_owner = true
@@ -35,6 +113,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_yb02p")
+metadata/_edit_lock_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainContainer"]
 layout_mode = 1
@@ -53,18 +132,50 @@ theme_override_constants/separation = 10
 
 [node name="simulate" type="Button" parent="MainContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme_override_font_sizes/font_size = 32
 text = "SIMULATE"
 
 [node name="settings" type="Button" parent="MainContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme_override_font_sizes/font_size = 32
 text = "SETTINGS"
 
 [node name="exit" type="Button" parent="MainContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme_override_font_sizes/font_size = 32
 text = "EXIT"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+unique_name_in_owner = true
+z_index = 4
+position = Vector2(570, 326)
+scale = Vector2(5.40918, 5.40918)
+color = Color(0.266667, 0.486275, 1, 1)
+energy = 3.6
+shadow_enabled = true
+shadow_color = Color(0.137255, 0, 0.909804, 0)
+shadow_filter = 2
+texture = SubResource("GradientTexture2D_8y7n3")
+
+[node name="Animator" type="AnimationPlayer" parent="."]
+autoplay = "fadein"
+libraries = {
+"": SubResource("AnimationLibrary_xs0ut")
+}
 
 [connection signal="button_down" from="MainContainer/VBoxContainer/simulate" to="." method="_on_simulate_button_down"]
 [connection signal="button_down" from="MainContainer/VBoxContainer/settings" to="." method="_on_settings_button_down"]

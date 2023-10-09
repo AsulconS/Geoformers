@@ -1,15 +1,52 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://bsrnu45h7u5r6"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://bsrnu45h7u5r6"]
 
 [ext_resource type="FontFile" uid="uid://ctlr1j6se6i2s" path="res://Content/Art/fonts/YoungSerif-Regular.ttf" id="1_j4iov"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_844hv"]
+content_margin_left = 50.0
+content_margin_top = 10.0
+content_margin_right = 50.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.639216)
+expand_margin_left = 20.0
+expand_margin_right = 20.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5q0q8"]
-content_margin_left = 40.0
-content_margin_top = 20.0
-content_margin_right = 40.0
-content_margin_bottom = 20.0
-bg_color = Color(0, 0, 0, 0.552941)
+content_margin_left = 50.0
+content_margin_top = 10.0
+content_margin_right = 50.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.431373)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4hafi"]
+bg_color = Color(0.45098, 0.596078, 0.886275, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1q4kn"]
+bg_color = Color(0.317647, 0.313726, 0.803922, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_okre4"]
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.788235, 0.788235, 0.788235, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [resource]
 Button/fonts/font = ExtResource("1_j4iov")
+Button/styles/hover = SubResource("StyleBoxFlat_844hv")
 Button/styles/normal = SubResource("StyleBoxFlat_5q0q8")
+Button/styles/pressed = SubResource("StyleBoxFlat_844hv")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_4hafi")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_1q4kn")
+HSlider/styles/slider = SubResource("StyleBoxFlat_okre4")
 Label/fonts/font = ExtResource("1_j4iov")

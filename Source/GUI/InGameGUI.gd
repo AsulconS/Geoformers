@@ -3,6 +3,7 @@ extends Control;
 @export var terrain_generator: TerrainGeneratorManager;
 @onready var stats: Label = %stats;
 @onready var config_btn: Button = %config_btn;
+@onready var config_animator: AnimationPlayer = %ConfigAnimator
 
 var config_menu: SettingsMenu = preload("res://Content/Levels/GUI/Settings.tscn").instantiate();
 
@@ -24,3 +25,13 @@ func _on_config_btn_button_down() -> void:
 
 func _on_config_back() -> void:
 	remove_child(config_menu);
+	config_animator.play_backwards("hover_config")
+
+func _on_config_btn_mouse_entered() -> void:
+	config_animator.play("hover_config")
+
+
+func _on_config_btn_mouse_exited() -> void:
+	if config_menu.is_inside_tree():
+		return
+	config_animator.play_backwards("hover_config")

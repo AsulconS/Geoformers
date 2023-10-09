@@ -13,6 +13,8 @@ config_version=5
 config/name="Geoformers"
 run/main_scene="res://Content/Levels/GUI/MainMenu.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [autoload]
@@ -89,3 +91,7 @@ TiltUp={
 , Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":3,"axis_value":-1.0,"script":null)
 ]
 }
+
+[rendering]
+
+anti_aliasing/stretch/aspect="keep"
