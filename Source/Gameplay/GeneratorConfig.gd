@@ -1,8 +1,8 @@
-extends Node
+extends Node;
 
-signal chunk_size_changed
+signal chunk_render_distance_changed;
 
-var chunk_size: int = 4:
+var chunk_render_distance: int = 4:
 	set(value):
-		chunk_size = value
-		emit_signal("chunk_size_changed")
+		chunk_render_distance = value;
+		emit_signal("chunk_render_distance_changed");
